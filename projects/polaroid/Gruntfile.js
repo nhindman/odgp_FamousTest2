@@ -8,6 +8,8 @@ module.exports = function(grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  grunt.registerTask('heroku:development', 'clean less mincss');
+
   // Load grunt config
   require('load-grunt-config')(grunt, {
     init: true,
