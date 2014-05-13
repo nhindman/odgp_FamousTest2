@@ -6,6 +6,7 @@ define(function(require, exports, module) {
     var StateModifier = require('famous/modifiers/StateModifier');
     var ViewSwapper = require('famous/views/Lightbox');
     var SlideView = require('views/SlideView');
+    var Easing = require('famous/transitions/Easing');
     /*
      * @name SlideshowView
      * @constructor
@@ -54,12 +55,17 @@ define(function(require, exports, module) {
     SlideshowView.prototype.constructor = SlideshowView;
 
     SlideshowView.prototype.showCurrentSlide = function() {
-            var slide = this.slides[this.currentIndex];
-            this.viewSwapper.show(slide);
+        this.ready = false;
+        var slide = this.slides[this.currentIndex];
+        this.viewSwapper.show(slide, function() {
+            this.ready = true;
+            slide.fadeIn();
+        }.bind(this));
     };
 
     SlideshowView.prototype.showNextSlide = function() {
-        console.log('showNextSlide fired')
+        if (!this.ready) return;
+        
         this.currentIndex++;
         console.log('this.currentIndex', this.currentIndex);
         //resets url array
@@ -72,7 +78,17 @@ define(function(require, exports, module) {
         data: undefined,
         //where in/out animations happen
         viewSwapperOpts: {
-            
+            inOpacity: 1, 
+            outOpacity: 0, 
+            inOrigin: [0, 0],
+            outOrigin: [0, 0], 
+            showOrigin: [0, 0], 
+            //Transform.thenMove() first applies  a transform then a
+            //translation based on [x, y, z]
+            inTransform: Transform.thenMove(Transform.rotateX(0.9), [0, -300, -300]), 
+            outTransform: Transform.thenMove(Transform.rotateZ(0.7), [0, window.innerHeight, -1000]), 
+            inTransition: { duration: 650, curve: 'easeOut' },
+            outTransition: { duration: 500, curve: Easing.inCubic }
         }
     };
 
