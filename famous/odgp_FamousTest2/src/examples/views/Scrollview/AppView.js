@@ -138,15 +138,16 @@ define(function(require, exports, module) {
     }.bind(this));
     this._eventOutput.on('ticketToggle', function(){
       this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
-      this.pageView.gymListView.detail._eventInput.emit('ticketToggle')
+      this.pageView.gymListView.detail._eventInput.emit('ticketToggle');
 //      this.pageView.gymListView.detail.slide.passViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
 //      this.pageView.gymListView.detail.slide.passViewMod.setOpacity(1);
     }.bind(this));
     this._eventInput.on('showGymListView', function(){
-        this.pageView._eventInput.emit('showGymListView')
+        this.pageView._eventInput.emit('showGymListView');
     }.bind(this));
     this._eventInput.on('showPassesView', function(){
-        this.pageView._eventInput.emit('showPassesView')
+        this.pageView._eventInput.emit('showPassesView');
+        this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
     }.bind(this));
   }
 
