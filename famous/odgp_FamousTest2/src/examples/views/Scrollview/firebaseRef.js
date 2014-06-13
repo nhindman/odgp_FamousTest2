@@ -14,6 +14,7 @@ define(function(require, exports, module) {
         } else if (user) {
           // user authenticated with Firebase
           module.exports.user = user;
+          window.user = user;
           console.log('User ID: ' + user.uid + ', Provider: ' + user.provider);
           if(module.exports.ready != null) module.exports.ready(true);
         } else {

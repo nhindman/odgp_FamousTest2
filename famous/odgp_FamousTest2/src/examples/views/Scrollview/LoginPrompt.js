@@ -1,3 +1,6 @@
+var BASE_URL = 'https://burning-fire-4148.firebaseio.com';
+var chatRef = new Firebase(BASE_URL);
+
 define(function(require, exports, module) {
     var Surface = require("famous/core/Surface");
     var RenderNode = require("famous/core/RenderNode");
@@ -171,16 +174,18 @@ define(function(require, exports, module) {
         this.buttonWidth = window.innerWidth - 20;
         this.buttonHeight = this.options.footerSize - 43;
 
-        this.buttonSurface = new ContainerSurface({
+        this.buttonSurface = new Surface({
             size: [this.buttonWidth, this.buttonHeight],
             classes: ["FB-button-surface"],
+            content: ['<div><img class="FB-logo" width="30" src="src/img/FB-logo.png"/>Login With Facebook</div>'].join(''),
             properties: {
                 backgroundColor: "#3b5998", 
                 borderRadius: "5px", 
                 color: "white", 
                 textAlign: "center",
-                lineHeight: this.buttonHeight +'px',
-                zIndex: 36
+                // lineHeight: this.buttonHeight +'px',
+                zIndex: 36, 
+                fontSize: "81%"
             }
         });
 
@@ -189,30 +194,11 @@ define(function(require, exports, module) {
             transform: Transform.translate(0, 0, 55)
         });
 
-        this.loginFacebook = new Surface({
-            size: [true, true], 
-            classes: ["FB-language"], 
-            content: '<div>Login With Facebook</div>',
-            properties: {
-                textAlign: "center", 
-                color: "white", 
-                fontSize: "81%"
-            }
-        });
-
-        this.loginFacebookMod = new StateModifier({
-            origin: [0.5, 0.5], 
-            transform: Transform.translate(0, 0, 56)
-        });
-
-        this.fbLogo = new Surface({
-            size: [true, 35], 
-            content: '<img width="30" src="src/img/FB-logo.png"/>',
-        });
-
-        this.fbLogoMod = new StateModifier({
-            origin: [.1, .36], 
-            transform: Transform.translate(0, 0, 56)
+        this.buttonSurface.on('click', function() {
+            FirebaseRef.auth.login('facebook', {
+                rememberMe: true,
+                scope: 'email,user_likes'
+            });
         });
 
         this.separator = new Surface({
@@ -258,8 +244,8 @@ define(function(require, exports, module) {
         });
 
         //adding to button surface and adding button to footer 
-        this.buttonSurface.add(this.fbLogoMod).add(this.fbLogo);
-        this.buttonSurface.add(this.loginFacebookMod).add(this.loginFacebook);
+        // this.buttonSurface.add(this.fbLogoMod).add(this.fbLogo);
+        // this.buttonSurface.add(this.loginFacebookMod).add(this.loginFacebook);
         this.footerBackground.add(this.registerMod).add(this.register);
         this.footerBackground.add(this.alreadyMod).add(this.alreadyMem);
         this.footerBackground.add(this.separatorMod).add(this.separator);
