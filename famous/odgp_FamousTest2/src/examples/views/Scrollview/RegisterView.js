@@ -279,7 +279,7 @@ define(function(require, exports, module) {
         //click on sign up button
         this.buttonSurface.on('click', function(e){
             if(e.detail != null) return false;
-            this._eventOutput.emit('validated user from register');
+            
 
             var email = $('.email-input').val();
             var password = $('.password-input').val();
@@ -300,12 +300,14 @@ define(function(require, exports, module) {
                 
             });
 
+            var self = this;
             function doLogin(email, password){
                 console.log("DO LOGIN")
                 FirebaseRef.auth.login('password', {
                     email: email, 
                     password: password    
                 });
+                self._eventOutput.emit('validated user from register');
             };
 
         }.bind(this));

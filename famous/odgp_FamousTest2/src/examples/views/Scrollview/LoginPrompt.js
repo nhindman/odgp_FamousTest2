@@ -293,6 +293,10 @@ define(function(require, exports, module) {
         }.bind(this));
 
         this._eventOutput.on('validated user from register',function(){
+            //hide keyboard
+            document.activeElement.blur();
+            $("input").blur();
+
             if (!this.creditCardView){
             this.createCreditCardView();
             }
