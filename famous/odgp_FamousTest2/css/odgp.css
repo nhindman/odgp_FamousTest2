@@ -214,6 +214,13 @@ input.zipcode-input {
   font-size: 85% !important;
 }
 
+.FB-logo {
+  position: relative;
+  top: 5px;
+  margin-right: 7px;
+  margin-top: 4px;
+}
+
 /*.payment-success-mg {
   opacity: 1;
 }*/
