@@ -42,11 +42,17 @@ define(function(require, exports, module) {
     this.slide.on('backButton-clicked', function() {
       this._eventOutput.emit('backButton-clicked');
     }.bind(this));
-      this._eventInput.on('ticketToggle', function(){
-          if (!this.passViewMod) return
-          this.passViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
-          this.passViewMod.setOpacity(1);
-      }.bind(slideView));
+    this._eventInput.on('ticketToggle', function(){
+      if (!this.passViewMod) return
+      this.passViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
+      this.passViewMod.setOpacity(1);
+    }.bind(slideView));
+    this._eventInput.on('hideTicket', function(){
+//          if (!this.passViewMod) return
+      this.passViewMod.setTransform(Transform.translate(0,0,0));
+      this.passViewMod.setOpacity(0);
+    }.bind(slideView));
+
     this.ready = false;
 
     this.add(new Modifier({size: [undefined, window.innerHeight]})).add(this.slide);

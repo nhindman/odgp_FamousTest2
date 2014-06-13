@@ -113,12 +113,12 @@ define(function(require, exports, module) {
     this._eventInput.on('ticketToggle', function(){
         this._eventInput.emit('menuToggle');
         this._eventOutput.emit('ticketToggle');
-        this._eventInput.emit('showGymListView');
+        this.pageView._eventInput.emit('showGymListView');  // show gymListNode without hiding the most recent purchased ticket
 
     }.bind(this));
     this._eventInput.on('pass closed', function(data, numPasses){
       console.log("pass closed received in appview");
-      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
+      this.removePageViewMask();
       this.menuView.ticketView._eventInput.emit('printTicket', data, numPasses);
       this._eventOutput.emit('pass closed');
       this.passDisappear();
@@ -134,20 +134,22 @@ define(function(require, exports, module) {
     }.bind(this));
     this.pageViewMask.on('click',function(){
       this._eventInput.emit('menuToggle');
-      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
+      this.removePageViewMask();
     }.bind(this));
     this._eventOutput.on('ticketToggle', function(){
-      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
+      this.removePageViewMask();
       this.pageView.gymListView.detail._eventInput.emit('ticketToggle');
 //      this.pageView.gymListView.detail.slide.passViewMod.setTransform(Transform.translate(0,-window.innerHeight,0));
 //      this.pageView.gymListView.detail.slide.passViewMod.setOpacity(1);
     }.bind(this));
-    this._eventInput.on('showGymListView', function(){
+    this._eventInput.on('showGymListView', function(){  // show gymListView with hiding the most recent purchased ticket
+        this.removePageViewMask();
+        this.pageView.gymListView.detail._eventInput.emit('hideTicket');
         this.pageView._eventInput.emit('showGymListView');
     }.bind(this));
     this._eventInput.on('showPassesView', function(){
+        this.removePageViewMask();
         this.pageView._eventInput.emit('showPassesView');
-        this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
     }.bind(this));
   }
 
@@ -220,6 +222,10 @@ define(function(require, exports, module) {
   AppView.prototype.passDisappear = function(){
       if (this.pageView.gymListView && this.pageView.gymListView.detail && this.pageView.gymListView.detail.slide && this.pageView.gymListView.detail.slide.passViewMod)
       this.pageView.gymListView.detail.slide.passViewMod.setTransform(Transform.translate(0,0,0));
+  };
+    
+  AppView.prototype.removePageViewMask = function(){
+      this.pageViewMaskMod.setTransform(Transform.translate(0,0,-4));
   };
 
   module.exports = AppView;
