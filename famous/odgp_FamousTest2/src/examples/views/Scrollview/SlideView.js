@@ -47,8 +47,8 @@ define(function(require, exports, module) {
 
   SlideView.DEFAULT_OPTIONS = {
     size: [undefined, undefined],
-    data: undefined, 
-    headerSize: 75, 
+    data: undefined,
+    headerSize: 75,
     footerSize: 63,
     posThreshold: window.innerHeight-165,
     velThreshold: -0.000001,
@@ -94,10 +94,10 @@ define(function(require, exports, module) {
       classes: ["overview-header"],
       size:[undefined,75],
       properties: {
-        backgroundColor: "black", 
+        backgroundColor: "black",
         color: "white"
       }
-      
+
     });
 
     this.headerBackgroundSurfaceMod = new Modifier({
@@ -106,7 +106,7 @@ define(function(require, exports, module) {
 
     this.arrowSurface = new Surface({
       size: [50, 30],
-      properties: { 
+      properties: {
         textAlign: "center",
         zIndex: 23
       },
@@ -119,7 +119,7 @@ define(function(require, exports, module) {
 
     this.arrowSensor = new Surface({
       size: [50, true],
-      properties: { 
+      properties: {
         textAlign: "center",
         zIndex: "5"
       }
@@ -133,10 +133,10 @@ define(function(require, exports, module) {
     this.overviewSurface = new Surface({
       size: [true, true],
       properties: {
-        backgroundColor: "black", 
-        color: "white", 
+        backgroundColor: "black",
+        color: "white",
         zIndex: 23
-      }, 
+      },
       content: '<div class="overview">Overview</div>'
     });
 
@@ -154,7 +154,7 @@ define(function(require, exports, module) {
       } else {
         this.detailSequence.splice(0,this.detailSequence.length);
         this._eventOutput.emit('backButton-clicked');
-      } 
+      }
     }.bind(this));
 
 
@@ -184,7 +184,7 @@ define(function(require, exports, module) {
     //   properties: {
     //     backgroundColor: "red",
     //     zIndex: 10
-    //   }, 
+    //   },
     //   color: "white"
     // });
 
@@ -237,7 +237,7 @@ define(function(require, exports, module) {
     this.distanceSurface = new Surface({
       size: [true, true],
       classes: ["distance-surface"],
-      content: '<span style="float: right;" class="distance-slideview">0.1mi</span>', 
+      content: '<span style="float: right;" class="distance-slideview">0.1mi</span>',
       properties: {
         backgroundColor: 'black',
         fontSize: "85%",
@@ -246,7 +246,7 @@ define(function(require, exports, module) {
     });
 
     this.distanceMod = new Modifier({
-      origin: [.939,0.655], 
+      origin: [.939,0.655],
       transform: Transform.translate(0,0,0)
     })
 
@@ -296,7 +296,7 @@ define(function(require, exports, module) {
       size: [gymPassPriceSize, true],
       content: this.options.data.price.content,
       properties: {
-        color: "white", 
+        color: "white",
         fontSize: "30px"
       }
     });
@@ -345,7 +345,7 @@ define(function(require, exports, module) {
       classes: ["footer-surface"],
       data: this.options.data,
       footerSize: this.options.footerSize
-    }); 
+    });
 
     //pipe enables clicks from overviewfooter.js to reach slideview.js
     this.footerSurface.pipe(this._eventOutput);
@@ -364,7 +364,7 @@ define(function(require, exports, module) {
 
     //this receives clicks from overfooter and creates confirmpurchase view
      this._eventOutput.on('buy-now-clicked', function(data){
-        //if a confirm purchase view exists then check if user is logged in 
+        //if a confirm purchase view exists then check if user is logged in
 
         if (this.confirmPurchase) {
             //if user is logged in create mypass when confirm purchase is clicked
@@ -384,8 +384,8 @@ define(function(require, exports, module) {
               transform:Transform.translate(0,0,100)
             });
             this.add(this.loginPromptMod).add(this.loginPrompt);
-            this._eventOutput.emit('userLogin');  
-      
+            this._eventOutput.emit('userLogin');
+
         } else {
           // console.log("buy-now-clicked")
           this.confirmPurchaseView = new ConfirmPurchase({
@@ -480,13 +480,16 @@ define(function(require, exports, module) {
 
     this.detailSequence = [];
 
+    this.triangleNode = new RenderNode();
     this.triangle = new Surface({
       size: [15, 15],
       classes: ["triangle"],
       content: '<img width="20" src="src/img/gray-triangle.png"/>'
     });
+    this.triangleMod = new StateModifier();
+    this.triangleNode.add(this.triangleMod).add(this.triangle);
 
-    this.detailSequence.push(this.triangle);
+    this.detailSequence.push(this.triangleNode);
     this.addOneDetailSurface([window.innerWidth,true],['<div style="background-color: rgb(236, 240, 241); height: 100%; font-size: 81%" class="hours"><span class="hours-today">Hours Today: 6:00 AM - 10:00PM</span>','<span style="float: right; color: green" class="open-or-closed">Open</span></div>'].join(''));
     // this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: #CFCFCF; height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold"><div class="gym-detail1"><img src="src/img/black-dumbell.png"/><img style="padding-bottom: 7px; float: right" class="swimming-con" width="50" src="src/img/swimming.png"/><img style="padding-bottom: 7px; float: right" class="swimming-con" width="50" src="src/img/sauna.png"/></div>');
     this.addOneDetailSurface([window.innerWidth,true],'<div style="background-color: rgb(236, 240, 241); height: 100%; font-size: 81%; box-shadow: rgba(0,0,0,.2); font-weight: bold" class="gym-detail1">A no-B.S. weightlifters gym with loads of space and a friendly staff.</div>');
@@ -494,13 +497,13 @@ define(function(require, exports, module) {
     var longitude = this.options.data.options.data.gym_longitudes[this.options.data.itemIndex];
     var mapHeight = Math.round(window.innerHeight/3);
     this.addOneDetailSurface([window.innerWidth,true], '<div style="background-color: rgb(236, 240, 241); height: 100%; font-size: 81%" class="map-header">122 West 23rd Street, btn. 6th and 7th ave.</div>')
-    
+
     //checks to see if user is on iphone
     var iPhoneFlag = false;
         if( navigator.userAgent.match(/iPhone|iPod/) ){
           iPhoneFlag = true;
         }
-    //if user is on iphone deep link to google maps native app when google map is clicked    
+    //if user is on iphone deep link to google maps native app when google map is clicked
     if(iPhoneFlag) {
         var googlemap_url = ['comgooglemaps://?center=',latitude,',',longitude,'&zoom=15&markers=color:red%7C',latitude,',',longitude,'&sensor=false'].join('');
         $("#map_link").attr("href", googlemap_url);
@@ -522,6 +525,7 @@ define(function(require, exports, module) {
       );
       this.sync.on('start', function(data) {
         this.startPos = data.clientY;
+        this.triangleMod.setOpacity(0, {duration:500});
       }.bind(this));
 
 
@@ -638,15 +642,15 @@ define(function(require, exports, module) {
     });
     var passes = chatRef.child('passes').child(FirebaseRef.user.id);
     passes.push({
-      userID: FirebaseRef.user.id, 
-      gymName: $(this.options.data.gymName.getContent()).text().split(/[ ]+/).join(' '), 
+      userID: FirebaseRef.user.id,
+      gymName: $(this.options.data.gymName.getContent()).text().split(/[ ]+/).join(' '),
       price: $(this.options.data.price.getContent()).text().split(/[ ]+/).join(' '),
       numDays: window.gymDays
     });
     // console.log("PASS DATA FROM SLIDEVIEW",this.options.data);
     // console.log("HERE'S THE USER IN SLIDEVIEW",FirebaseRef.user);
     // console.log("HERE'S THE USERID IN SLIDEVIEW",FirebaseRef.user.id)
-    
+
     // this line will return all the passes for a certain user
     // FirebaseRef.chatRef.child('passes').child(FirebaseRef.user.id).limit(100).on('child_added', function(snapshot) {console.log(snapshot.val())})
 
@@ -689,6 +693,7 @@ define(function(require, exports, module) {
           this.detailScrollview._eventInput.emit('end',{velocity: 3});
         }.bind(this),270)
       }
+      this.triangleMod.setOpacity(1, {duration:300});
   };
 
   SlideView.prototype.stopScrolling = function(v){
