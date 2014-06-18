@@ -450,6 +450,7 @@ define(function(require, exports, module) {
   //#### -- ADD PHOTOS TO GYMPHOTO SCROLLVIEW --- #####
   SlideView.prototype.addPhotoSurface = function(content){
       var photoSurface = new Surface({
+        size:[undefined, thirdWindowHeight],
         content: content
       });
       photoSurface.pipe(this.gymPhotos); // scrolling
@@ -467,6 +468,8 @@ define(function(require, exports, module) {
         clipSize: 15 + window.innerHeight - this.options.headerSize - this.options.footerSize - (thirdWindowHeight+2*gymDetailItemHeight),
         direction:1 // 1 means Y direction
     });
+    this.gymPassContainer.pipe(this.detailScrollview);
+    this.gymNameSurface.pipe(this.detailScrollview);
 
     this.detailScrollviewPos = new Transitionable(thirdWindowHeight+2*gymDetailItemHeight);
 
